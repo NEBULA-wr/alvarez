@@ -1,0 +1,6 @@
+{
+  "name": "Frayers Solutions",
+  "description": "Firma técnica de ingeniería, arquitectura, diseño de interiores y consultoría, con paneles de administración y portal de clientes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
