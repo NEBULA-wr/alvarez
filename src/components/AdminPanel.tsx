@@ -506,17 +506,17 @@ export default function AdminPanel({ currentProfile, onLogout }: AdminPanelProps
         </div>
 
         {/* Footer Sidebar */}
-        <div className="p-4 border-t border-white/5 space-y-3">
-          <div className="flex items-center gap-2 px-2 py-1 bg-white/5 rounded-md hover:bg-white/10 transition select-none">
+        <div className="p-4 border-t border-white/5 space-y-3.5">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-md hover:bg-white/10 transition select-none">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span className="text-[10px] font-semibold text-gray-300">Tiempo Real Sincronizado</span>
           </div>
           
           <button 
             onClick={onLogout}
-            className="w-full flex items-center gap-3 px-4 py-2 text-xs font-bold tracking-wide uppercase text-red-400/80 hover:text-red-400 hover:bg-white/5 rounded-lg transition"
+            className="w-full flex items-center justify-center gap-3 px-4 py-4.5 text-sm font-black tracking-widest uppercase bg-red-950/20 hover:bg-red-950/40 text-red-400 border border-red-900/40 hover:border-red-500/50 rounded-xl transition-all duration-200 shadow-md active:scale-[0.98]"
           >
-            <LogOut className="w-4 h-4" /> Cerrar Sesión
+            <LogOut className="w-5 h-5 stroke-[3.0]" /> Cerrar Sesión
           </button>
         </div>
       </aside>

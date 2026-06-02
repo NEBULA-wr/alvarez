@@ -532,31 +532,31 @@ export default function ClientPortal({ currentUserProfile, onLogout, onGoBackToL
         </div>
 
         {/* Footer Sidebar */}
-        <div className="p-4 border-t border-white/5 space-y-3">
-          <div className="px-3 py-1 text-[10px] text-gray-400 leading-tight">
-            Hola, <span className="font-bold text-white block truncate">{currentUserProfile?.full_name || 'Visitante Explorador'}</span>
+        <div className="p-4 border-t border-white/5 space-y-3.5">
+          <div className="px-3 py-1 text-xs text-gray-400 leading-tight">
+            Hola, <span className="font-extrabold text-white text-sm block truncate mt-0.5">{currentUserProfile?.full_name || 'Visitante Explorador'}</span>
           </div>
 
           <button 
             onClick={onGoBackToLanding}
-            className="w-full flex items-center gap-3 px-4 py-2 text-xs font-bold tracking-wide uppercase text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition"
+            className="w-full flex items-center justify-center gap-3 px-4 py-4.5 text-sm font-black tracking-widest uppercase bg-white/5 hover:bg-white/10 text-white border border-white/10 hover:border-white/20 rounded-xl transition-all duration-200 shadow-md active:scale-[0.98]"
           >
-            <ArrowLeft className="w-4 h-4 text-[#d4af37]" /> Ir a Inicio
+            <ArrowLeft className="w-5 h-5 text-[#d4af37] stroke-[3.0]" /> Ir a Inicio
           </button>
           
           {currentUserProfile ? (
             <button 
               onClick={onLogout}
-              className="w-full flex items-center gap-3 px-4 py-2 text-xs font-bold tracking-wide uppercase text-red-400/85 hover:text-red-400 hover:bg-white/5 rounded-lg transition"
+              className="w-full flex items-center justify-center gap-3 px-4 py-4.5 text-sm font-black tracking-widest uppercase bg-red-950/20 hover:bg-red-950/40 text-red-400 border border-red-900/40 hover:border-red-500/50 rounded-xl transition-all duration-200 shadow-md active:scale-[0.98]"
             >
-              <LogOut className="w-4 h-4" /> Salir de Sesión
+              <LogOut className="w-5 h-5 stroke-[3.0]" /> Salir de Sesión
             </button>
           ) : (
             <button 
               onClick={onGoToLogin}
-              className="w-full flex items-center gap-3 px-4 py-2 text-xs font-bold tracking-wide uppercase text-green-400/85 hover:text-green-400 hover:bg-white/5 rounded-lg transition"
+              className="w-full flex items-center justify-center gap-3 px-4 py-4.5 text-sm font-black tracking-widest uppercase bg-emerald-950/20 hover:bg-emerald-950/40 text-emerald-400 border border-emerald-900/40 hover:border-emerald-500/50 rounded-xl transition-all duration-200 shadow-md active:scale-[0.98]"
             >
-              <LogOut className="w-4 h-4" /> Iniciar Sesión / Crear Cuenta
+              <LogOut className="w-5 h-5 stroke-[3.0]" /> Iniciar Sesión / Crear Cuenta
             </button>
           )}
         </div>
