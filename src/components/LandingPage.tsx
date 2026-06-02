@@ -204,21 +204,14 @@ export default function LandingPage({ onGoToLogin, onGoToClientPortal }: Landing
 
   // Lightbox Navigation
   const handleLightboxPrev = () => {
-    setLightboxIndex((prev) => (prev - 1 + (projects.length || featuredFallback.length)) % (projects.length || featuredFallback.length));
+    if (projects.length === 0) return;
+    setLightboxIndex((prev) => (prev - 1 + projects.length) % projects.length);
   };
 
   const handleLightboxNext = () => {
-    setLightboxIndex((prev) => (prev + 1) % (projects.length || featuredFallback.length));
+    if (projects.length === 0) return;
+    setLightboxIndex((prev) => (prev + 1) % projects.length);
   };
-
-  // Fallback para proyectos destacados si no hay ninguno en Supabase
-  const featuredFallback = [
-    { title: 'Obras Civiles', theme: 'Excavación y Obras Civiles', img: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=800&q=80' },
-    { title: 'Acabados Interiores', theme: 'Acabados de Pisos finos', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80' },
-    { title: 'Estructura Metálica', theme: 'Estructura Metálica industrial', img: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=800&q=80' },
-    { title: 'Cubierta Industrial', theme: 'Nave industrial de alta resistencia', img: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?auto=format&fit=crop&w=800&q=80' },
-    { title: 'Instalaciones Eléctricas', theme: 'Instalaciones eléctricas de potencia', img: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=800&q=80' }
-  ];
 
   return (
     <div className="text-gray-800 bg-[#f5f5f0] min-h-screen selection:bg-[#d4af37] selection:text-white" id="inicio">
@@ -539,88 +532,64 @@ export default function LandingPage({ onGoToLogin, onGoToClientPortal }: Landing
       </section>
 
       {/* ===================== PROJECTS SECTION ===================== */}
-      <section id="proyectos" className="py-20 bg-[#001f3f] text-white">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <ImageIcon className="w-5 h-5 text-[#d4af37]" />
-                <h2 className="font-display font-black text-2xl uppercase tracking-wide leading-none">
-                  Proyectos Destacados
-                </h2>
+      {(loadingProjects || projects.length > 0) && (
+        <section id="proyectos" className="py-20 bg-[#001f3f] text-white">
+          <div className="container mx-auto px-6">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <ImageIcon className="w-5 h-5 text-[#d4af37]" />
+                  <h2 className="font-display font-black text-2xl uppercase tracking-wide leading-none">
+                    Proyectos Destacados
+                  </h2>
+                </div>
+                <div className="w-12 h-1 bg-[#d4af37]"></div>
               </div>
-              <div className="w-12 h-1 bg-[#d4af37]"></div>
+              <button 
+                onClick={onGoToClientPortal}
+                className="bg-[#d4af37] hover:bg-[#b8952e] text-white px-6 py-2.5 rounded font-display font-bold text-xs uppercase tracking-wider inline-flex items-center gap-1.5 transition duration-300"
+              >
+                Ver Todos los Proyectos <ArrowRight className="w-4 h-4" />
+              </button>
             </div>
-            <button 
-              onClick={onGoToClientPortal}
-              className="bg-[#d4af37] hover:bg-[#b8952e] text-white px-6 py-2.5 rounded font-display font-bold text-xs uppercase tracking-wider inline-flex items-center gap-1.5 transition duration-300"
-            >
-              Ver Todos los Proyectos <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {loadingProjects ? (
-              <div className="col-span-full py-16 text-center text-gray-400">
-                <span className="inline-block w-6 h-6 border-2 border-white/20 border-t-[#d4af37] rounded-full animate-spin"></span>
-                <p className="text-xs mt-2 font-mono">Consultando base de datos Supabase...</p>
-              </div>
-            ) : projects.length > 0 ? (
-              projects.map((p, idx) => (
-                <div 
-                  key={p.id} 
-                  className="group relative overflow-hidden rounded-lg h-[260px] cursor-pointer shadow-lg border border-blue-900/40"
-                  onClick={() => {
-                    setLightboxIndex(idx);
-                    setLightboxActive(true);
-                  }}
-                >
-                  <img 
-                    src={p.cover_url || 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=800&q=80'} 
-                    alt={p.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition duration-500" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent group-hover:from-[#001f3fdc] transition duration-300" />
-                  <div className="absolute inset-0 flex flex-col justify-end p-4">
-                    <div className="w-8 h-8 rounded-full bg-[#d4af37] text-white flex items-center justify-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-0 group-hover:scale-100 transition duration-300">
-                      <Maximize2 className="w-4 h-4" />
-                    </div>
-                    <span className="text-[9px] text-[#d4af37] font-bold uppercase tracking-wider mb-1">{p.category}</span>
-                    <h4 className="font-display font-bold text-xs uppercase text-white leading-tight">{p.title}</h4>
-                    <p className="text-[10px] text-gray-400 mt-1">Ver detalles</p>
-                  </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {loadingProjects ? (
+                <div className="col-span-full py-16 text-center text-gray-400">
+                  <span className="inline-block w-6 h-6 border-2 border-white/20 border-t-[#d4af37] rounded-full animate-spin"></span>
+                  <p className="text-xs mt-2 font-mono">Consultando base de datos Supabase...</p>
                 </div>
-              ))
-            ) : (
-              featuredFallback.map((item, idx) => (
-                <div 
-                  key={idx} 
-                  className="group relative overflow-hidden rounded-lg h-[260px] cursor-pointer shadow-lg border border-blue-900/40"
-                  onClick={() => {
-                    setLightboxIndex(idx);
-                    setLightboxActive(true);
-                  }}
-                >
-                  <img 
-                    src={item.img} 
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition duration-500" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent group-hover:from-[#001f3fdc] transition duration-300" />
-                  <div className="absolute inset-0 flex flex-col justify-end p-4">
-                    <div className="w-8 h-8 rounded-full bg-[#d4af37] text-white flex items-center justify-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-0 group-hover:scale-100 transition duration-300">
-                      <Maximize2 className="w-4 h-4" />
+              ) : (
+                projects.map((p, idx) => (
+                  <div 
+                    key={p.id} 
+                    className="group relative overflow-hidden rounded-lg h-[260px] cursor-pointer shadow-lg border border-blue-900/40"
+                    onClick={() => {
+                      setLightboxIndex(idx);
+                      setLightboxActive(true);
+                    }}
+                  >
+                    <img 
+                      src={p.cover_url || 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=800&q=80'} 
+                      alt={p.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition duration-500" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent group-hover:from-[#001f3fdc] transition duration-300" />
+                    <div className="absolute inset-0 flex flex-col justify-end p-4">
+                      <div className="w-8 h-8 rounded-full bg-[#d4af37] text-white flex items-center justify-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-0 group-hover:scale-100 transition duration-300">
+                        <Maximize2 className="w-4 h-4" />
+                      </div>
+                      <span className="text-[9px] text-[#d4af37] font-bold uppercase tracking-wider mb-1">{p.category}</span>
+                      <h4 className="font-display font-bold text-xs uppercase text-white leading-tight">{p.title}</h4>
+                      <p className="text-[10px] text-gray-400 mt-1">Ver detalles</p>
                     </div>
-                    <span className="text-[9px] text-[#d4af37] font-bold uppercase tracking-wider mb-1">Obras Civiles</span>
-                    <h4 className="font-display font-bold text-xs uppercase text-white leading-tight">{item.title}</h4>
-                    <p className="text-[10px] text-gray-400 mt-1">Ver detalles</p>
                   </div>
-                </div>
-              ))
-            )}
+                ))
+              )}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ===================== WHY US + STATS ===================== */}
       <section className="py-20 bg-teal-800 text-white border-t border-teal-900/30">
@@ -906,7 +875,6 @@ export default function LandingPage({ onGoToLogin, onGoToClientPortal }: Landing
         {/* Copyright */}
         <div className="border-t border-blue-900/30 pt-6 text-center text-[10px] text-gray-500">
           <p>&copy; 2026 Frayers Solutions Ingeniería y Arquitectura. Todos los derechos reservados.</p>
-          <p className="mt-1">Diseño &amp; Desarrollo Técnico Sincronizado Supabase</p>
         </div>
       </footer>
 
@@ -943,15 +911,15 @@ export default function LandingPage({ onGoToLogin, onGoToClientPortal }: Landing
 
           <div className="max-w-4xl w-full text-center">
             <img 
-              src={projects.length > 0 ? (projects[lightboxIndex]?.cover_url || '') : (featuredFallback[lightboxIndex]?.img || '')} 
+              src={projects[lightboxIndex]?.cover_url || ''} 
               alt="Proyecto ampliado" 
               className="max-h-[75vh] max-w-full object-contain mx-auto rounded-lg shadow-2xl"
             />
             <p className="text-white mt-4 font-display font-bold text-sm tracking-widest uppercase">
-              {projects.length > 0 ? projects[lightboxIndex]?.title : featuredFallback[lightboxIndex]?.title}
+              {projects[lightboxIndex]?.title || ''}
             </p>
             <p className="text-gray-400 text-xs mt-1">
-              {projects.length > 0 ? projects[lightboxIndex]?.category : featuredFallback[lightboxIndex]?.theme}
+              {projects[lightboxIndex]?.category || ''}
             </p>
           </div>
         </div>
